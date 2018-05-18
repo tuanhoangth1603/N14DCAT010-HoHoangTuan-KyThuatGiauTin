@@ -1,0 +1,45 @@
+﻿@model GoogleDriveRestAPI_v3.UserAccount
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<body style="background:url(/image/bgr.jpg); color:#00ffff; ">
+    <h1 style="color:#00ff90; font-family:'Berlin Sans FB'">WELCOME TO HT MUSIC</h1>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset style="margin-top: 100px">
+            <legend>LOGIN</legend>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Username)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Username)
+                @Html.ValidationMessageFor(model => model.Username)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Password)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>
+
+
+
+
+
+
+            <br />
+            <div>
+                <input type="submit" value="Login" />
+                <a href="http://localhost:7927/Home/Register" style="text-decoration:none; color:#ffffff; margin-left:20px;"> <b>|   Register</b> </a>
+            </div>
+        </fieldset>
+    }
+</body>

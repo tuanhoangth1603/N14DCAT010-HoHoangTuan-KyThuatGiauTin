@@ -1,0 +1,141 @@
+﻿@model IEnumerable<GoogleDriveRestAPI_v3.Models.GoogleDriveFiles>
+@{
+    ViewBag.Title = "HT MUSIC";
+}   
+<body style="background:url(/image/bgr.jpg); height:auto; width:auto">
+    <h1 style="color:#00ff90; font-family:'Berlin Sans FB'">WELCOME TO HT MUSIC</h1>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    @if (Session["Username"] == null)
+    {
+        <div style="left">
+            <a href="http://localhost:7927/Home/Login" style="text-decoration:none; color:#00ffff;"> <b> Login to Listen and Download music !!!</b> </a>
+        </div>
+
+    }
+    else
+    {
+        <div>
+            <p style="color: #00ffff">User: @Session["Username"].ToString() </p>
+        </div>
+    }
+    @if (Session["Username"] != null && Session["Username"].Equals("admin"))
+    {
+        <div style="width:80%; text-align:left; color:#00ff90">
+            @using (Html.BeginForm("UploadFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <p>
+                    <label for="file">Upload file:</label>
+                    <input type="file" name="file" id="file" />
+                    <input type="submit" value="Upload" />
+                </p>
+            }
+        </div>
+
+    }
+
+
+    <style type="text/css">
+        #header {
+            width: 100%;
+            background-color: #4a608f;
+            text-align: center;
+        }
+
+        #layouttable {
+            border: 0px;
+            width: 100%;
+            font-family: 'Segoe UI';
+        }
+
+            #layouttable td.col1 {
+                width: 20%;
+                vertical-align: top;
+            }
+
+            #layouttable td.col2 {
+                width: 60%;
+                vertical-align: top;
+                background-color: #E8E8E8;
+            }
+
+            #layouttable td.col3 {
+                width: 20%;
+                vertical-align: top;
+            }
+    </style>
+
+    <center style="margin-top:30px; margin-bottom:350px; align-content:center;">
+
+
+        <table class="table" border="1" style="color:#00ff90; text-align:center; background:#233868">
+
+
+
+
+            @if (Model.Count() > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr id="layouttable">
+                        <td style="width:300px ">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td style="width:200px">
+                            @{
+                    long? KiloByte = @item.Size / 1024;
+                    string NewSize = KiloByte + " KB";
+                            }
+                            @NewSize
+                        </td>
+
+
+                        @if (Session["Username"] != null)
+                        {
+                            <td>
+                                <input type="button" class="DownloadFile" value="Download" data-key=@item.Id style="align-content:center" />
+                            </td>
+                            <td>
+                                <audio controls="controls"  src="~/Music/Charge.wav">
+                                    Your browser does not support the audio element.
+                                </audio>
+
+                            </td>
+                        }
+
+
+                        @if (Session["Username"] != null && Session["Username"].Equals("admin"))
+                        {
+                            <td>
+                                @using (Html.BeginForm("DeleteFile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    <input type="hidden" name=Id value="@item.Id">
+                                    <input type="submit" class="DeleteFile" value="Delete" style="align-content:center" />
+                                }
+
+                            </td>
+                        
+                        }
+                        
+
+
+
+                    </tr>
+                }
+            }
+
+
+        </table>
+        
+
+    </center>
+    
+    <footer style="color:#00ff90; font-family:'Britannic'; "> Hồ Hoàng Tuấn - N14DCAT010</footer>
+</body>
+
+<script>
+    $(document).on('click', '.DownloadFile', function () {
+        debugger;
+        var fileId = $(this).attr("data-key");
+        window.location.href = '/Home/DownloadFile/' + fileId;
+    });
+</script>
